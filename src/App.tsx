@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "@emotion/styled";
+import { useSelector, useDispatch } from "react-redux";
+import { loadTodos } from "redux/actions/todo";
+import { rootState } from "redux/reducers";
+import TodoItem from "components/TodoItem";
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadTodos());
+  }, [dispatch]);
+
+  const todos = useSelector((state: rootState) => state.todos);
+
   return (
     <Container>
       <Header alt="todo-logo" src="/logo.png" />
@@ -10,7 +22,7 @@ function App() {
         <Button type="submit">+</Button>
       </form>
       <TodoList>
-        <TodoItem></TodoItem>
+        {todos && todos.map((todo) => <TodoItem todo={todo} />)}
       </TodoList>
     </Container>
   );
@@ -25,7 +37,6 @@ const Container = styled.div`
   max-width: 600px;
   min-height: 90vh;
   margin: 20px auto;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   box-sizing: border-box;
 `;
 
@@ -47,6 +58,8 @@ const Button = styled.button`
   color: white;
 `;
 
-const TodoList = styled.div``;
-
-const TodoItem = styled.div``;
+const TodoList = styled.div`
+  width: 250px;
+  margin-top: 20px;
+  list-style: none;
+`;
