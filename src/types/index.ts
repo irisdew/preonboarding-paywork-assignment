@@ -12,5 +12,6 @@ export type newContent = {
 };
 
 export type newStatus = {
+  id: string;
   isCheck: boolean;
 };

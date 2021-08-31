@@ -25,7 +25,15 @@ const todoReducer: Reducer<todos, AnyAction> = (
     case EDIT_TODO:
       return state;
     case CHECK_TODO:
-      return state;
+      return state.map((todo) => {
+        if (todo.id === action.payload.id) {
+          return {
+            ...todo,
+            isCheck: action.payload.isCheck,
+          };
+        }
+        return todo;
+      });
     case REMOVE_TODO:
       return state;
     default:

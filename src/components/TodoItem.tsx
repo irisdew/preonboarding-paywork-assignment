@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
+import { useDispatch } from "react-redux";
+import { checkTodo } from "redux/actions/todo";
 import { todo } from "types";
 
 interface TodoItemProps {
@@ -7,9 +9,13 @@ interface TodoItemProps {
 }
 
 const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
-  console.log(todo);
+  const dispatch = useDispatch();
 
-  const handleCheckChange = () => {};
+  const handleCheckChange = () => {
+    console.log({ id: todo.id, isCheck: !todo.isCheck });
+    const newStatus = { id: todo.id, isCheck: !todo.isCheck };
+    dispatch(checkTodo(newStatus));
+  };
 
   return (
     <Item key={todo.id}>
@@ -39,6 +45,10 @@ const Item = styled.div`
   padding: 10px;
   background-color: #eee;
   font-size: 14px;
+
+  .complete {
+    text-decoration: line-through;
+  }
 
   input {
     margin-right: 8px;
