@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState, ChangeEvent } from "react";
 import styled from "@emotion/styled";
 import { useDispatch } from "react-redux";
-import { checkTodo, removeTodo } from "redux/actions/todo";
-import { todo } from "types";
+import { checkTodo, editTodo, removeTodo } from "redux/actions/todo";
+import { todo, newContent, newStatus } from "types";
 
 interface TodoItemProps {
   todo: todo;
@@ -10,10 +10,26 @@ interface TodoItemProps {
 
 const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
   const dispatch = useDispatch();
+  const [editMode, setEditMode] = useState(false);
+  const [editContent, setEditContent] = useState(todo.content);
 
   const handleCheckChange = () => {
-    const newStatus = { id: todo.id, isCheck: !todo.isCheck };
+    const newStatus: newStatus = { id: todo.id, isCheck: !todo.isCheck };
     dispatch(checkTodo(newStatus));
+  };
+
+  const handleEditStart = () => {
+    setEditMode(true);
+  };
+
+  const handleEditEnd = () => {
+    const newContent: newContent = { id: todo.id, content: editContent };
+    dispatch(editTodo(newContent));
+    setEditMode(false);
+  };
+
+  const handleEditContentChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setEditContent(e.target.value);
   };
 
   const handleRemoveBtnClick = () => {
@@ -28,10 +44,28 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
           checked={todo.isCheck}
           onChange={handleCheckChange}
         />
-        {todo.content}
+        {editMode ? (
+          <>
+            <input
+              type="text"
+              value={editContent}
+              onChange={handleEditContentChange}
+            />
+          </>
+        ) : (
+          todo.content
+        )}
       </label>
       <div>
-        <button className={"editBtn"}>수정</button>
+        {editMode ? (
+          <button className={"editBtn"} onClick={handleEditEnd}>
+            수정 완료
+          </button>
+        ) : (
+          <button className={"editBtn"} onClick={handleEditStart}>
+            수정
+          </button>
+        )}
         <button className={"removeBtn"} onClick={handleRemoveBtnClick}>
           삭제
         </button>
@@ -55,8 +89,12 @@ const Item = styled.div`
     text-decoration: line-through;
   }
 
-  input {
+  input[type="checkbox"] {
     margin-right: 8px;
+  }
+
+  input[type="text"] {
+    width: 150px;
   }
 
   button {

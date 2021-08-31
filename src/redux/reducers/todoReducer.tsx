@@ -23,7 +23,15 @@ const todoReducer: Reducer<todos, AnyAction> = (
     case LOAD_TODOS:
       return state;
     case EDIT_TODO:
-      return state;
+      return state.map((todo) => {
+        if (todo.id === action.payload.id) {
+          return {
+            ...todo,
+            content: action.payload.content,
+          };
+        }
+        return todo;
+      });
     case CHECK_TODO:
       return state.map((todo) => {
         if (todo.id === action.payload.id) {

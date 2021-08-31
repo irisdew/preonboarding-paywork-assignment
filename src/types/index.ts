@@ -8,6 +8,7 @@ export type todo = {
 export type todos = todo[];
 
 export type newContent = {
+  id: string;
   content: string;
 };
 
