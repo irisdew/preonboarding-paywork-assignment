@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { useDispatch } from "react-redux";
-import { checkTodo } from "redux/actions/todo";
+import { checkTodo, removeTodo } from "redux/actions/todo";
 import { todo } from "types";
 
 interface TodoItemProps {
@@ -12,9 +12,12 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
   const dispatch = useDispatch();
 
   const handleCheckChange = () => {
-    console.log({ id: todo.id, isCheck: !todo.isCheck });
     const newStatus = { id: todo.id, isCheck: !todo.isCheck };
     dispatch(checkTodo(newStatus));
+  };
+
+  const handleRemoveBtnClick = () => {
+    dispatch(removeTodo(todo.id));
   };
 
   return (
@@ -29,7 +32,9 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
       </label>
       <div>
         <button className={"editBtn"}>수정</button>
-        <button className={"removeBtn"}>삭제</button>
+        <button className={"removeBtn"} onClick={handleRemoveBtnClick}>
+          삭제
+        </button>
       </div>
     </Item>
   );

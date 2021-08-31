@@ -35,7 +35,7 @@ const todoReducer: Reducer<todos, AnyAction> = (
         return todo;
       });
     case REMOVE_TODO:
-      return state;
+      return state.filter((todo) => todo.id !== action.payload);
     default:
       return state;
   }
