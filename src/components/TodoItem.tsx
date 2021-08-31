@@ -1,20 +1,24 @@
 import React from "react";
 import styled from "@emotion/styled";
+import { todo } from "types";
 
 interface TodoItemProps {
-  todo: {
-    id: string;
-    content: string;
-    isChecked: boolean;
-    createdAt: Date;
-  };
+  todo: todo;
 }
 
 const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
+  console.log(todo);
+
+  const handleCheckChange = () => {};
+
   return (
     <Item key={todo.id}>
-      <label className={todo.isChecked ? "complete" : undefined}>
-        <input type="checkbox" checked={todo.isChecked} />
+      <label className={todo.isCheck ? "complete" : undefined}>
+        <input
+          type="checkbox"
+          checked={todo.isCheck}
+          onChange={handleCheckChange}
+        />
         {todo.content}
       </label>
       <div>

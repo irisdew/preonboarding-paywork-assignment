@@ -1,7 +1,7 @@
 export type todo = {
   id: string;
   content: string;
-  isChecked: boolean;
+  isCheck: boolean;
   createdAt: Date;
 };
 
@@ -12,5 +12,5 @@ export type newContent = {
 };
 
 export type newStatus = {
-  isChecked: boolean;
+  isCheck: boolean;
 };

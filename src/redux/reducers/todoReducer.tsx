@@ -9,14 +9,7 @@ import {
 } from "redux/actions/types";
 import { todos } from "types";
 
-type todo = {
-  id: string;
-  content: string;
-  isChecked: boolean;
-  createdAt: Date;
-};
-
-const initialState: todo[] = [];
+const initialState: todos = [];
 
 const todoReducer: Reducer<todos, AnyAction> = (
   state = initialState,
