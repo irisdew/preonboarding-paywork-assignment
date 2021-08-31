@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { call, delay, put, takeLatest } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import {
   ADD_TODO,
   FETCH_TODOS,
@@ -15,8 +15,8 @@ export function* todoWatchers() {
   // yield takeLatest(ADD_TODO, handleAddTodo);
   yield takeLatest(LOAD_TODOS, handleLoadTodos);
   //   yield takeLatest(EDIT_TODO, handleEditTodo);
-  //   yield takeLatest(CHECK_TODO, handleCheckTodo);
-  //   yield takeLatest(REMOVE_TODO, handleRemoveTodo);
+  yield takeLatest(CHECK_TODO, handleCheckTodo);
+  // yield takeLatest(REMOVE_TODO, handleRemoveTodo);
 }
 
 // REQUEST(API)
@@ -34,38 +34,23 @@ export function requsetCheckTodo() {
   return axios.post(`${BASE_URL}/1`, { isCheked: true }, options);
 }
 
-function editAPI() {}
-
 // HANDLER
 export function* handleLoadTodos() {
   try {
     const response: AxiosResponse = yield call(requestFetchTodos);
     const { data } = response;
-    console.log(data);
     yield put(fetchTodos(data.todoList));
   } catch (e) {
     console.error(e);
   }
 }
 
-export function* handleFetchTodos() {
+export function* handleCheckTodo() {
   try {
-    const response: AxiosResponse = yield call(requestFetchTodos);
-    const { data } = response;
-    console.log(data);
-    yield put(fetchTodos(data.todoList));
+    const response: AxiosResponse = yield call(requsetCheckTodo);
+    alert(response.data.msg);
   } catch (e) {
     console.error(e);
   }
 }
 
-export function* editTodo() {
-  try {
-    yield call(editAPI);
-    yield put({
-      type: EDIT_TODO,
-    });
-  } catch (e) {
-    console.error(e);
-  }
-}
