@@ -17,10 +17,10 @@ function App() {
   return (
     <Container>
       <Header alt="todo-logo" src="/logo.png" />
-      <form>
+      <TodoForm>
         <Input type="text" placeholder="할 일을 입력해주세요" />
         <Button type="submit">+</Button>
-      </form>
+      </TodoForm>
       <TodoList>
         {todos && todos.map((todo) => <TodoItem todo={todo} />)}
       </TodoList>
@@ -37,29 +37,35 @@ const Container = styled.div`
   max-width: 600px;
   min-height: 90vh;
   margin: 20px auto;
-  box-sizing: border-box;
 `;
 
 const Header = styled.img`
-  width: 300px;
-  margin: 30px 0;
+  width: 400px;
+  margin: 10px 0 30px;
+`;
+
+const TodoForm = styled.form`
+  display: flex;
 `;
 
 const Input = styled.input`
-  width: 200px;
+  width: 250px;
   padding: 8px;
   border-bottom: #202040 2px solid;
 `;
 
 const Button = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 50px;
-  padding: 8px;
   background-color: #202040;
   color: white;
+  font-size: 16px;
+  font-weight: 700; ;
 `;
 
 const TodoList = styled.div`
-  width: 250px;
+  width: 300px;
   margin-top: 20px;
-  list-style: none;
 `;
