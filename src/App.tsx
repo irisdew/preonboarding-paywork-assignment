@@ -1,12 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import styled from "@emotion/styled";
 import { useSelector, useDispatch } from "react-redux";
-import { loadTodos } from "redux/actions/todo";
+import { loadTodos, addTodo } from "redux/actions/todo";
 import { rootState } from "redux/reducers";
 import TodoItem from "components/TodoItem";
 
 function App() {
   const dispatch = useDispatch();
+
+  const [nextId, setNextId] = useState(4);
+  const [content, setContent] = useState("");
 
   useEffect(() => {
     dispatch(loadTodos());
@@ -14,12 +17,37 @@ function App() {
 
   const todos = useSelector((state: rootState) => state.todos);
 
+  const handleContentChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setContent(e.target.value);
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const now = new Date();
+    const newTodo = {
+      id: String(nextId),
+      content,
+      isCheck: false,
+      createdAt: now,
+    };
+    dispatch(addTodo(newTodo));
+    setContent("");
+    setNextId((prev) => prev + 1);
+  };
+
   return (
     <Container>
       <Header alt="todo-logo" src="/logo.png" />
       <TodoForm>
-        <Input type="text" placeholder="할 일을 입력해주세요" />
-        <Button type="submit">+</Button>
+        <Input
+          type="text"
+          placeholder="할 일을 입력해주세요"
+          value={content}
+          onChange={handleContentChange}
+        />
+        <Button type="submit" onClick={handleSubmit}>
+          +
+        </Button>
       </TodoForm>
       <TodoList>
         {todos && todos.map((todo) => <TodoItem todo={todo} />)}
