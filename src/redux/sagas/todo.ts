@@ -2,7 +2,6 @@ import axios, { AxiosResponse } from "axios";
 import { call, put, takeLatest } from "redux-saga/effects";
 import {
   ADD_TODO,
-  FETCH_TODOS,
   LOAD_TODOS,
   EDIT_TODO,
   CHECK_TODO,
@@ -12,7 +11,7 @@ import { fetchTodos } from "redux/actions/todo";
 
 // WATCHERS
 export function* todoWatchers() {
-  // yield takeLatest(ADD_TODO, handleAddTodo);
+  yield takeLatest(ADD_TODO, handleAddTodo);
   yield takeLatest(LOAD_TODOS, handleLoadTodos);
   yield takeLatest(CHECK_TODO, handleCheckTodo);
   yield takeLatest(REMOVE_TODO, handleRemoveTodo);
@@ -20,29 +19,42 @@ export function* todoWatchers() {
 }
 
 // REQUEST(API)
-const BASE_URL =
-  "https://da3f608f-4fcc-4bc2-95e9-622e27c184c5.mock.pstmn.io/todo";
+const BASE_URL = "https://40cbe147-4414-480d-b2e3-9ad31e0d1eb2.mock.pstmn.io";
 const options = {
   headers: { "Content-Type": "application/json" },
 };
 
+export function requestAddTodo(): Promise<AxiosResponse> {
+  return axios.post(`${BASE_URL}/todo`, { content: "string" }, options);
+}
+
 export function requestFetchTodos(): Promise<AxiosResponse> {
-  return axios.get(BASE_URL);
+  return axios.get(`${BASE_URL}/todo`);
 }
 
-export function requsetCheckTodo() {
-  return axios.post(`${BASE_URL}/1`, { isCheked: true }, options);
+export function requsetCheckTodo(): Promise<AxiosResponse> {
+  return axios.post(`${BASE_URL}/todo/1`, { isCheked: true }, options);
 }
 
-export function requestRemoveTodo() {
-  return axios.post(`${BASE_URL}/2`, {}, options);
+export function requestRemoveTodo(): Promise<AxiosResponse> {
+  return axios.post(`${BASE_URL}/todo/2`, {}, options);
 }
 
-export function requestEditTodo() {
-  return axios.post(`${BASE_URL}/3`, { content: "string" }, options);
+export function requestEditTodo(): Promise<AxiosResponse> {
+  return axios.post(`${BASE_URL}/todo/3`, { content: "string" }, options);
 }
 
 // HANDLER
+export function* handleAddTodo() {
+  try {
+    const response: AxiosResponse = yield call(requestAddTodo);
+    alert(response.data.msg);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+
 export function* handleLoadTodos() {
   try {
     const response: AxiosResponse = yield call(requestFetchTodos);
