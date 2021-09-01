@@ -14,14 +14,14 @@ import { fetchTodos } from "redux/actions/todo";
 export function* todoWatchers() {
   // yield takeLatest(ADD_TODO, handleAddTodo);
   yield takeLatest(LOAD_TODOS, handleLoadTodos);
-  //   yield takeLatest(EDIT_TODO, handleEditTodo);
   yield takeLatest(CHECK_TODO, handleCheckTodo);
-  // yield takeLatest(REMOVE_TODO, handleRemoveTodo);
+  yield takeLatest(REMOVE_TODO, handleRemoveTodo);
+  yield takeLatest(EDIT_TODO, handleEditTodo);
 }
 
 // REQUEST(API)
 const BASE_URL =
-  "https://e03f7880-1434-456b-9063-86037efc9105.mock.pstmn.io/todo";
+  "https://da3f608f-4fcc-4bc2-95e9-622e27c184c5.mock.pstmn.io/todo";
 const options = {
   headers: { "Content-Type": "application/json" },
 };
@@ -34,8 +34,26 @@ export function requsetCheckTodo() {
   return axios.post(`${BASE_URL}/1`, { isCheked: true }, options);
 }
 
+export function requestRemoveTodo() {
+  return axios.post(`${BASE_URL}/2`, {}, options);
+}
+
+export function requestEditTodo() {
+  return axios.post(`${BASE_URL}/3`, { content: "string" }, options);
+}
+
 // HANDLER
 export function* handleLoadTodos() {
+  try {
+    const response: AxiosResponse = yield call(requestFetchTodos);
+    const { data } = response;
+    yield put(fetchTodos(data.todoList));
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export function* handleFetchTodos() {
   try {
     const response: AxiosResponse = yield call(requestFetchTodos);
     const { data } = response;
@@ -54,3 +72,20 @@ export function* handleCheckTodo() {
   }
 }
 
+export function* handleRemoveTodo() {
+  try {
+    const response: AxiosResponse = yield call(requestRemoveTodo);
+    alert(response.data.msg);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export function* handleEditTodo() {
+  try {
+    const response: AxiosResponse = yield call(requestEditTodo);
+    alert(response.data.msg);
+  } catch (e) {
+    console.error(e);
+  }
+}
